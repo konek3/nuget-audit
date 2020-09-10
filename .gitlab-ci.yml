@@ -1,7 +1,19 @@
 stages:
   - build
+  - deploy
 
 build_job:
   stage: build
   script:
     - 'dotnet build src'  # restore Nuget dependencies
+
+deploy_job:
+   stage: deploy
+   script:
+     - dotnet restore -p:Configuration=Release
+     - dotnet build src
+     - dotnet pack src
+     - dotnet nuget add source "$CI_SERVER_URL/api/v4/projects/$CI_PROJECT_ID/packages/nuget/index.json" --name gitlab --username gitlab-ci-token --password $CI_JOB_TOKEN --store-password-in-clear-text
+     - dotnet nuget push "nupkg/*.nupkg" --source gitlab
+   only:
+     - master
