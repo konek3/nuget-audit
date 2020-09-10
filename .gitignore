@@ -1,0 +1,6 @@
+bin/
+obj/
+nupkg/
+.vscode/
+
+.DS_Store
