@@ -27,3 +27,8 @@ jobs:
       with:
         name: NugetAudit
         path: nupkg/*.nupkg
+    - name: Upload Nuget to GitHub packages
+      run: |
+        dotnet nuget add source https://nuget.pkg.github.com/konek3/index.json -n github -u konek3 -p secrets.GITHUB_TOKEN --store-password-in-clear-text
+        dotnet nuget push "nupkg/*.nupkg" --source "github"
+        
