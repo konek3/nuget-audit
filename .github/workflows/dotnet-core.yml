@@ -23,3 +23,7 @@ jobs:
       run: dotnet build src --configuration Release --no-restore
     - name: NuGet pack
       run : dotnet pack src --configuration Release --no-restore --no-build
+    - uses: actions/upload-artifact@v2
+      with:
+        name: NugetAudit
+        path: nupkg/*.nupkg
