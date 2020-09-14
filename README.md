@@ -18,15 +18,15 @@ export NUGET_AUDIT_USERNAME <your_username>
 Then, run:
 
 ```bash
-nuget-audit -- audit-level=(Low|Medium|High|Critical) (path)
+nuget-audit --audit-level=(Low|Medium|High|Critical) (path)
 ```
 
 Examples:
 
 ```bash
-nuget-audit -- audit-level=High .
+nuget-audit --audit-level=High .
 
-nuget-audit -- audit-level=Low ~/Projects/MyAwesomeProject/
+nuget-audit --audit-level=Low ~/Projects/MyAwesomeProject/
 ```
 
 
