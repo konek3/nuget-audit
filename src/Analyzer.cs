@@ -73,7 +73,7 @@ namespace nuget_audit
                         case Severity.High:
                             Console.ForegroundColor = ConsoleColor.Red;
                             break;
-                        case Severity.Crticial:
+                        case Severity.Critical:
                             Console.ForegroundColor = ConsoleColor.DarkRed;
                             break;
                         case Severity.None:

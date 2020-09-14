@@ -6,6 +6,6 @@ namespace nuget_audit.Enums
         Low,
         Medium,
         High,
-        Crticial
+        Critical
     }
 }

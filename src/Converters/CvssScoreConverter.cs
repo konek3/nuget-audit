@@ -24,7 +24,7 @@ namespace nuget_audit.Converters
             }
             else
             {
-                return Severity.Crticial;
+                return Severity.Critical;
             }
         }
     }
