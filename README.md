@@ -5,7 +5,7 @@ nuget-audit is a dotnet tool for checking vulnerabilities in your .NET projects.
 ## Installation
 
 ```bash
-dotnet tool install -g nuget-audit
+dotnet tool install -g NugetAudit
 ```
 
 ## Usage
