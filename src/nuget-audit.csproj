@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <RootNamespace>nuget_audit</RootNamespace>
     <PackageId>NugetAudit</PackageId>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>kmikula@future-processing.com</Authors>
     <Company>Future Processing</Company>
     <Description>npm audit but for NuGet packages.</Description>
