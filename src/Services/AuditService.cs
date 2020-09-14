@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using nuget_audit.Interfaces;
 using nuget_audit.Models;
-using nuget_audit.src.Extensions;
+using nuget_audit.Extensions;
 using RestSharp;
 using RestSharp.Authenticators;
 

@@ -19,7 +19,7 @@ namespace nuget_audit
                 Console.WriteLine($"NugetAudit v{versionString}");
                 Console.WriteLine("-------------");
                 Console.WriteLine("\nUsage:");
-                Console.WriteLine("nuget-audit -- audit-level=(low|moderate|high|critical) (path)");
+                Console.WriteLine("nuget-audit -- audit-level=(Low|Medium|High|Critical) (path)");
 
                 return;
             }
@@ -33,7 +33,12 @@ namespace nuget_audit
         {
             try
             {
-                await new Analyzer().Analyze(args);
+                var result = await new Analyzer(args).Analyze();
+
+                if(result)
+                {
+                    Environment.Exit(1);
+                }
             }
             catch(Exception e)
             {

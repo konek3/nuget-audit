@@ -4,6 +4,6 @@ namespace nuget_audit.Interfaces
 {
     public interface IAnalyzer
     {
-         Task Analyze(string[] args);
+        Task<bool> Analyze();
     }
 }

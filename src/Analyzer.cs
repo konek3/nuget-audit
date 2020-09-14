@@ -1,5 +1,4 @@
 using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using nuget_audit.Converters;
@@ -7,7 +6,7 @@ using nuget_audit.Enums;
 using nuget_audit.Helpers;
 using nuget_audit.Interfaces;
 using nuget_audit.Services;
-using nuget_audit.src.Extensions;
+using nuget_audit.Extensions;
 
 namespace nuget_audit
 {
@@ -16,21 +15,23 @@ namespace nuget_audit
         private readonly IAuditService _auditService;
         private readonly IProjectInformationService _projectInformationService;
         private readonly IConfigurationHelper _configurationHelper;
+        private delegate void _configurationHelperBootstrap();
 
-        public Analyzer()
+        public Analyzer(string[] args)
         {
             _configurationHelper = new ConfigurationHelper();
+
             _configurationHelper.ValidateConfiguration();
+            _configurationHelper.SetConfigurationFromArgs(args);
 
             _auditService = new AuditService(_configurationHelper);
             _projectInformationService = new ProjectInformationService();
         }
 
-        public async Task Analyze(string[] args)
+        public async Task<bool> Analyze()
         {
-            ValidateArgs(args);
-
-            var packages = await _projectInformationService.GetNugetPackagesAsync(args.Last()).ToListAsync();
+            var shouldFail = false;
+            var packages = await _projectInformationService.GetNugetPackagesAsync(_configurationHelper.Path).ToListAsync();
 
             Console.WriteLine($"Analyzing {packages.Count()} NuGet packages...");
 
@@ -49,9 +50,9 @@ namespace nuget_audit
                     continue;
                 }
 
-                ConsoleHelper.ColorWrite(ConsoleColor.Yellow, "[WARNING] ");
+                ConsoleHelper.ColorWrite(ConsoleColor.DarkYellow, "[WARNING] ");
 
-                Console.WriteLine($"Vulnerabilities found: {vulnerabilitiesCount}");
+                Console.WriteLine($"Found {vulnerabilitiesCount} vulnerabilities in package: {packageName}\n");
 
                 foreach (var vulnerability in result.Vulnerabilities)
                 {
@@ -64,6 +65,7 @@ namespace nuget_audit
                     {
                         case Severity.Low:
                             Console.ForegroundColor = ConsoleColor.Green;
+
                             break;
                         case Severity.Medium:
                             Console.ForegroundColor = ConsoleColor.Yellow;
@@ -85,16 +87,20 @@ namespace nuget_audit
                     Console.WriteLine("]\n");
                 }
             }
-        }
 
-        private void ValidateArgs(string[] args)
-        {
-            var path = args.Last();
+            var flatResults = results.SelectMany(result => result.Vulnerabilities).ToList();
+            var totalCount = flatResults.Count;
 
-            if (!Directory.Exists(path))
+            Console.WriteLine($"\nTotal vulnerabilities found: {totalCount}");
+
+            var vulnerabilitiesLevel = flatResults.Select(vul => CvssScoreConverter.ConvertScoreToSeverity(vul.CvssScore));
+
+            if (vulnerabilitiesLevel.Any(level => level > _configurationHelper.AuditLevel))
             {
-                throw new ArgumentException("Project path is not valid. Please specify a proper path.");
+                shouldFail = true;
             }
+
+            return shouldFail;
         }
     }
 }

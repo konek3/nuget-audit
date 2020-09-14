@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace nuget_audit.src.Extensions
+namespace nuget_audit.Extensions
 {
     public static class AsyncEnumerableExtensions
     {
